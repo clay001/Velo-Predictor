@@ -23,7 +23,7 @@ def plot_auc_temp(y_test, y_score, num_class, name, c='r'):
     plt.plot(fpr, tpr, c=c, lw=1, alpha=0.7, label= name + '=%.3f' % macro_auc)
 
 
-def origin( X, num_class=4):
+def origin( X, num_class=4,random_state=7):
     # Extract the labels for training
     labels = X['target']
     target_names = [str(i) for i in range(num_class)]
@@ -36,7 +36,7 @@ def origin( X, num_class=4):
     plt.figure(dpi=600)
 
     X_train, X_test, y_train, y_test = train_test_split(X, labels, stratify=labels, test_size=0.3,
-                                                            random_state=326)
+                                                            random_state=random_state)
     X_train = X_train.drop(columns=["ID"])
     # Extract the ids
     test_ids = X_test['ID']
@@ -45,9 +45,8 @@ def origin( X, num_class=4):
     # Extract feature names
     feature_names = list(X_train.columns)
 
-    model = RandomForestClassifier(random_state=0)
+    model = RandomForestClassifier(random_state=random_state)
 
-    # 原始是黑色
     model.fit(X_train, y_train)
     test_predictions = model.predict_proba(X_test)
     plot_auc_temp(y_test, test_predictions, num_class, name="origin", c="r")
@@ -72,8 +71,8 @@ def origin( X, num_class=4):
     plt.show()
     return
 
-
-def test_oversample(X, num_class=4):
+# oversampling methods compare
+def test_oversample(X, num_class=4, random_state=7):
     # Extract the labels for training
     labels = X['target']
     target_names = [str(i) for i in range(num_class)]
@@ -99,7 +98,7 @@ def test_oversample(X, num_class=4):
             sample_solver = SVMSMOTE()
         X_all, y_all = sample_solver.fit_sample(X, labels)
 
-        X_train, X_test, y_train, y_test = train_test_split(X_all, y_all, stratify=y_all, test_size=0.3, random_state=326)
+        X_train, X_test, y_train, y_test = train_test_split(X_all, y_all, stratify=y_all, test_size=0.3, random_state=random_state)
 
         X_train = X_train.drop(columns=["ID"])
         # Extract the ids
@@ -109,7 +108,7 @@ def test_oversample(X, num_class=4):
         # Extract feature names
         feature_names = list(X_train.columns)
 
-        model = RandomForestClassifier(random_state=0)
+        model = RandomForestClassifier(random_state=random_state)
 
         # 原始是黑色
         model.fit(X_train, y_train)
@@ -139,7 +138,7 @@ def test_oversample(X, num_class=4):
     plt.show()
     return
 
-def test_undersample(X, num_class=4):
+def test_undersample(X, num_class=4, random_state=7):
     # Extract the labels for training
     labels = X['target']
     target_names = [str(i) for i in range(num_class)]
@@ -151,7 +150,7 @@ def test_undersample(X, num_class=4):
     plot_fraction(labels, num_class=num_class)
     plt.figure(dpi=600)
     colorlist = ["b", "g", "r", "c", "m", "y", "k"]
-    modelist = ["NearMiss", "CC", "RUS", "RENN", \
+    modelist = ["NearMiss", "RUS", "RENN", \
                 "NCR", "OSS"]
 
     for i in range(len(modelist)):
@@ -159,19 +158,19 @@ def test_undersample(X, num_class=4):
         if model_name == "NearMiss":
             sample_solver = NearMiss()
         elif model_name == "CC":
-            sample_solver = ClusterCentroids(random_state=0)
+            sample_solver = ClusterCentroids(random_state=random_state)
         elif model_name == "RUS":
-            sample_solver = RandomUnderSampler(random_state=0)
+            sample_solver = RandomUnderSampler(random_state=random_state)
         elif model_name == "RENN":
             sample_solver = RepeatedEditedNearestNeighbours()
         elif model_name == "NCR":
             sample_solver = NeighbourhoodCleaningRule()
         elif model_name == "OSS":
-            sample_solver = OneSidedSelection(random_state=0)
+            sample_solver = OneSidedSelection(random_state=random_state)
         X_all, y_all = sample_solver.fit_sample(X, labels)
 
         X_train, X_test, y_train, y_test = train_test_split(X_all, y_all, stratify=y_all, test_size=0.3,
-                                                            random_state=326)
+                                                            random_state=random_state)
 
         X_train = X_train.drop(columns=["ID"])
         # Extract the ids
@@ -181,7 +180,7 @@ def test_undersample(X, num_class=4):
         # Extract feature names
         feature_names = list(X_train.columns)
 
-        model = RandomForestClassifier(random_state=0)
+        model = RandomForestClassifier(random_state=random_state)
 
         # 原始是黑色
         model.fit(X_train, y_train)
@@ -211,7 +210,7 @@ def test_undersample(X, num_class=4):
     plt.show()
     return
 
-def test_combine(X, num_class=4):
+def test_combine(X, num_class=4, random_state = 7):
     # Extract the labels for training
     labels = X['target']
     target_names = [str(i) for i in range(num_class)]
@@ -230,11 +229,11 @@ def test_combine(X, num_class=4):
         if model_name == "SMOTETomek":
             sample_solver = SMOTETomek()
         elif model_name == "SMOTEENN":
-            sample_solver = SMOTEENN(random_state=0)
+            sample_solver = SMOTEENN(random_state=random_state)
         X_all, y_all = sample_solver.fit_sample(X, labels)
 
         X_train, X_test, y_train, y_test = train_test_split(X_all, y_all, stratify=y_all, test_size=0.3,
-                                                            random_state=326)
+                                                            random_state=random_state)
 
         X_train = X_train.drop(columns=["ID"])
         # Extract the ids
@@ -244,7 +243,7 @@ def test_combine(X, num_class=4):
         # Extract feature names
         feature_names = list(X_train.columns)
 
-        model = RandomForestClassifier(random_state=0)
+        model = RandomForestClassifier(random_state=random_state)
 
         # 原始是黑色
         model.fit(X_train, y_train)
@@ -274,7 +273,8 @@ def test_combine(X, num_class=4):
     plt.show()
     return
 
-def test_ensemble(X, num_class=4):
+# test
+def test_ensemble(X, num_class=4, random_state=7):
     # Extract the labels for training
     labels = X['target']
     target_names = [str(i) for i in range(num_class)]
@@ -294,7 +294,7 @@ def test_ensemble(X, num_class=4):
         # X_all, y_all = sample_solver.fit_sample(X, labels)
 
         X_train, X_test, y_train, y_test = train_test_split(X, labels, stratify=labels, test_size=0.3,
-                                                            random_state=326)
+                                                            random_state=random_state)
 
         X_train = X_train.drop(columns=["ID"])
         # Extract the ids
@@ -307,18 +307,18 @@ def test_ensemble(X, num_class=4):
         if model_name == "LogisticCV":
             model = LogisticRegressionCV(class_weight='balanced', solver='lbfgs', multi_class="multinomial")
         elif model_name == "RandomForest":
-            model = RandomForestClassifier(random_state=0)
+            model = RandomForestClassifier(random_state=random_state)
         elif model_name == "BBC":
             model = BalancedBaggingClassifier(base_estimator=DecisionTreeClassifier(),
                                               sampling_strategy='auto',
                                               replacement=False,
-                                              random_state=0)
+                                              random_state=random_state)
         elif model_name == "BRF":
-            model = BalancedRandomForestClassifier(n_estimators=100, random_state=0)
+            model = BalancedRandomForestClassifier(n_estimators=100, random_state=random_state)
         elif model_name == "RUSBoostC":
-            model = RUSBoostClassifier(n_estimators=200, algorithm='SAMME.R', random_state=0)
+            model = RUSBoostClassifier(n_estimators=200, algorithm='SAMME.R', random_state=random_state)
         elif model_name == "EasyEC":
-            model = EasyEnsembleClassifier(random_state=0)
+            model = EasyEnsembleClassifier(random_state=random_state)
 
         model.fit(X_train, y_train)
         test_predictions = model.predict_proba(X_test)
@@ -346,6 +346,7 @@ def test_ensemble(X, num_class=4):
     plt.title('ROC and AUC of ensemble methods', fontsize=17)
     plt.show()
     return
+
 
 
 if __name__ == "__main__":

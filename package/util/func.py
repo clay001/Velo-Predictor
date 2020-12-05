@@ -207,7 +207,7 @@ def eval_result_gene(test_real, test_predict):
     print("Kappa score: ", kappa)
 
 
-def eval_result(test_real, test_predict, num_class):
+def eval_result(test_real, test_predict, num_class,cmap="RdBu_r"):
     target_names = [str(i) for i in range(num_class)]
     cm = confusion_matrix(np.array(test_real["real_class"]), np.array(test_predict["predict_class"]),
                           labels=np.arange(num_class))
@@ -215,7 +215,7 @@ def eval_result(test_real, test_predict, num_class):
                                columns=target_names)
     fig, ax = plt.subplots(figsize=(8, 8))
 
-    sns.heatmap(conf_matrix, annot=True, annot_kws={"size": 15}, cmap="Blues")
+    sns.heatmap(conf_matrix, annot=True, annot_kws={"size": 15}, cmap=cmap)
     plt.ylabel("True label", fontsize=18)
     plt.xlabel("Predicted label", fontsize=18)
     plt.xticks(fontsize=18)

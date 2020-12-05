@@ -46,7 +46,7 @@ def model_RF(features, num_class=4, over_sampling=True):
     plot_auc(y_test, test_predictions, num_class= num_class)
 
     test_predictions = get_result(test_predictions)
-    print(balanced_accuracy_score(y_test, test_predictions))
+    print("RF balance score is ", balanced_accuracy_score(y_test, test_predictions))
     test_predict = pd.DataFrame({'ID': test_ids, 'predict_class': test_predictions})
     test_real = pd.DataFrame({'ID': test_ids, 'real_class': y_test})
 

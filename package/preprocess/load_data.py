@@ -29,6 +29,7 @@ def gain_data(dataset, mode='stochastic', basis='umap', cluster_info=False):
         scv.tl.recover_dynamics(adata)
     # compute velo
     scv.tl.velocity(adata, mode=mode)
+    # scv.tl.umap
 
     # cosine correlation of potential cell transitions
     # approx=True： reduced PCA space with 50 components
