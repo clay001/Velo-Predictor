@@ -17,6 +17,8 @@ def gain_data(dataset, mode='stochastic', basis='umap', cluster_info=False):
         adata = scv.datasets.pancreas()
     if dataset == "forebrain":
         adata = scv.datasets.forebrain()
+    else:
+        raise KeyError("Wrong dataset name")
 
     scv.pl.proportions(adata)
     # filter genes, log = True or False
