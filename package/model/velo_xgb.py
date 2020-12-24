@@ -11,13 +11,13 @@ warnings.filterwarnings('ignore')
 
 
 # 特征矩阵有ID项，label指示target
-def model_regression(features, n_folds=5, use_gene_list=False):
+def model_regression(features, n_folds=5, use_gene_list=False, test_size=0.2):
     if use_gene_list:
         gene_list = np.load("gene_list.npy").tolist()
         features = pd.DataFrame(features, columns=["ID"] + gene_list + ["target"])
 
     labels = features['target']
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2)
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=test_size)
 
     # Extract the ids
     test_ids = X_test['ID']
@@ -105,7 +105,7 @@ def model_regression(features, n_folds=5, use_gene_list=False):
     return test_predict, test_real, feature_importances, valid
 
 @timing
-def model_XGBC(features, n_folds=5, num_class=4, plot=True, over_sampling=True):
+def model_XGBC(features, n_folds=5, num_class=4, plot=True, over_sampling=True, test_size=0.3):
     # Extract the labels
     # classification_transfer(features['target'])
     labels = features['target']
@@ -119,7 +119,7 @@ def model_XGBC(features, n_folds=5, num_class=4, plot=True, over_sampling=True):
         print("After imbalance processing type ratio:")
         plot_fraction(labels, num_class=num_class)
 
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, stratify=labels, test_size=0.3)
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, stratify=labels, test_size=test_size)
     # SMOTE
     # Extract the ids
     test_ids = X_test['ID']

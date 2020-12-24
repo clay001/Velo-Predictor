@@ -9,7 +9,7 @@ import xgboost as xgb
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import balanced_accuracy_score
 
-def stacking_model(features,num_class = 4, RANDOM_SEED=326):
+def stacking_model(features,num_class = 4, RANDOM_SEED=326, test_size=0.3):
     labels = features['target']
     features = features.drop(columns=['target'])
 
@@ -20,7 +20,7 @@ def stacking_model(features,num_class = 4, RANDOM_SEED=326):
     print("After imbalance processing type ratio:")
     plot_fraction(labels, num_class=num_class)
 
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, stratify=labels, test_size=0.3, random_state=RANDOM_SEED)
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, stratify=labels, test_size=test_size, random_state=RANDOM_SEED)
 
     # Extract the ids
     test_ids = X_test['ID']

@@ -151,8 +151,14 @@ def plot_fraction_gene(X):
 def plot_fraction(X, num_class):
     plt.axes(aspect="equal")
     counts = pd.DataFrame(X)['target'].value_counts()
-    plt.pie(x=counts, labels=pd.Series(counts.index).map({i: str(i) for i in range(num_class)}),
-            autopct='%.2f%%')
+    patches, l_text, p_text = plt.pie(x=counts,
+                                      labels=pd.Series(counts.index).map({i: str(i) for i in range(num_class)}),
+                                      autopct='%.2f%%')
+    for t in p_text:
+        t.set_size(15)
+
+    for t in l_text:
+        t.set_size(15)
     plt.show()
 
 
@@ -213,13 +219,16 @@ def eval_result(test_real, test_predict, num_class,cmap="RdBu_r"):
                           labels=np.arange(num_class))
     conf_matrix = pd.DataFrame(cm, index=target_names,
                                columns=target_names)
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(11, 11))
 
-    sns.heatmap(conf_matrix, annot=True, annot_kws={"size": 15}, cmap=cmap)
-    plt.ylabel("True label", fontsize=18)
-    plt.xlabel("Predicted label", fontsize=18)
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
+    h = sns.heatmap(conf_matrix, annot=True, annot_kws={"size": 25}, cmap=cmap, cbar=False)
+    cb = h.figure.colorbar(h.collections[0])
+    cb.ax.tick_params(labelsize=25)
+
+    plt.ylabel("True label", fontsize=25)
+    plt.xlabel("Predicted label", fontsize=25)
+    plt.xticks(fontsize=25)
+    plt.yticks(fontsize=25)
     # plt.savefig("xxx.pdf",bbox_inches="tight")
     plt.show()
 

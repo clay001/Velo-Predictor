@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 from sklearn.metrics import balanced_accuracy_score
 from imblearn.ensemble import BalancedRandomForestClassifier
 
-def model_RF(features, num_class=4, over_sampling=True):
+def model_RF(features, num_class=4, over_sampling=True, test_size=0.3):
     X = features
     # Extract the labels for training
     labels = X['target']
@@ -25,7 +25,7 @@ def model_RF(features, num_class=4, over_sampling=True):
         print("After imbalance processing type ratio:")
         plot_fraction(labels, num_class=num_class)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, labels, stratify=labels, test_size=0.3, random_state=326)
+    X_train, X_test, y_train, y_test = train_test_split(X, labels, stratify=labels, test_size=test_size, random_state=326)
 
     # Extract the ids
     test_ids = X_test['ID']
